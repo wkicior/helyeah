@@ -1,0 +1,30 @@
+wwo-proxy:
+  image: wkicior/wwo-proxy:v3
+  ports:
+    - "8000:80"
+mail-gateway:
+  image: wkicior/mail-gateway
+  ports:
+    - "9998:81"
+  priviledged: true
+  volumes:
+    - ../mail-gateway:/app:rw
+notifications-mongo:
+  image: mongo
+notifications-service:
+  image: wkicior/notifications-service
+  ports:
+    - "9999:9000"
+  links:
+    - mail-gateway
+    - notifications-mongo
+  priviledged: true
+  volumes:
+    - ../notifications-service:/app:rw
+forecast-engine:
+  image: wkicior/forecast-engine
+  ports:
+    - "8091:8020"
+  priviledged: true
+  volumes:
+    - ~/.m2:/root/.m2
