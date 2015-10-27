@@ -1,12 +1,12 @@
 wwo-proxy:
-  image: wkicior/wwo-proxy:v3
+  image: wkicior/wwo-proxy
   ports:
     - "8000:80"
 mail-gateway:
   image: wkicior/mail-gateway
   ports:
     - "9998:81"
-  priviledged: true
+  privileged: true
   volumes:
     - ../mail-gateway:/app:rw
 notifications-mongo:
@@ -14,17 +14,20 @@ notifications-mongo:
 notifications-service:
   image: wkicior/notifications-service
   ports:
-    - "9999:9000"
+    - "9999:80"
   links:
     - mail-gateway
     - notifications-mongo
-  priviledged: true
+  privileged: true
   volumes:
     - ../notifications-service:/app:rw
 forecast-engine:
   image: wkicior/forecast-engine
   ports:
     - "8091:8020"
-  priviledged: true
+  links:
+    - notifications-service
+    - wwo-proxy
+  privileged: true
   volumes:
     - ~/.m2:/root/.m2
