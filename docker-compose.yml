@@ -24,7 +24,7 @@ notifications-service:
 forecast-engine:
   image: wkicior/forecast-engine
   ports:
-    - "8091:8020"
+    - "8091:8080"
   links:
     - notifications-service
     - wwo-proxy
